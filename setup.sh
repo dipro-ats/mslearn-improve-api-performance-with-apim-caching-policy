@@ -2,7 +2,7 @@
 
 apiappname=BoardGamingAPI$(openssl rand -hex 5)
 
-printf "Setting username and password for Git ... (1/7)\n\n"
+printf "Setting username and password for Git ... (1/8)\n\n"
 
 GIT_USERNAME=gitName$Random
 GIT_EMAIL=a@b.c
@@ -11,23 +11,29 @@ git config --global user.name "$GIT_USERNAME"
 git config --global user.email "$GIT_EMAIL"
 
 
-RESOURCE_GROUP=$(az group list --query "[0].name" -o tsv)
+RESOURCE_GROUP=az-mslearn-apim-$RANDOM
+LOCATION=canadacentral
+
+#Create Resource Group
+printf "\nCreating Resource Group ... (2/8)\n\n"
+
+az group create --name $RESOURCE_GROUP --location $LOCATION
 
 # Create App Service plan
 PLAN_NAME=myPlan
 
 
-printf "\nCreating App Service plan in FREE tier ... (2/7)\n\n"
+printf "\nCreating App Service plan in FREE tier ... (2/8)\n\n"
 
 
 az appservice plan create --name $apiappname --resource-group $RESOURCE_GROUP --sku FREE --location centralus
 
-printf "\nCreating API App ... (3/7)\n\n"
+printf "\nCreating API App ... (3/8)\n\n"
 
 az webapp create --name $apiappname --resource-group $RESOURCE_GROUP --plan $apiappname --deployment-local-git
 
 
-printf "\nSetting the account-level deployment credentials ...(4/7)\n\n"
+printf "\nSetting the account-level deployment credentials ...(4/8)\n\n"
 
 
 DEPLOY_USER="myName1$(openssl rand -hex 5)"
@@ -44,19 +50,19 @@ REMOTE_NAME=production
 
 
 # Set remote on src
-printf "\nSetting Git remote...(5/7)\n\n"
+printf "\nSetting Git remote...(5/8)\n\n"
 
 
 git remote add $REMOTE_NAME $GIT_URL
 
 
-printf "\nGit add...(6/7)\n\n"
+printf "\nGit add...(6/8)\n\n"
 
 git add .
 git commit -m "initial revision"
 
 
-printf "\nGit push... (7/7)\n\n"
+printf "\nGit push... (7/8)\n\n"
 
 
 # printf "When prompted for a password enter this: $DEPLOY_PASSWORD\n"
